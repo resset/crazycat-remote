@@ -24,12 +24,12 @@ RF24 radio(7, 8);
 byte addresses[][6] = {"1Node","2Node"};
 
 /*
- * Timer
+ * Timer setup
  */
 
 volatile uint8_t timer_timeout;
 
-void blinkLED(void)
+void getKeyStates(void)
 {
   timer_timeout = 1;
 }
@@ -63,7 +63,7 @@ void setup(void)
   radio.openWritingPipe(addresses[1]);
 
   Timer1.initialize(125000);
-  Timer1.attachInterrupt(blinkLED);
+  Timer1.attachInterrupt(getKeyStates);
 }
 
 /*
