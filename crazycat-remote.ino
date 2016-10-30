@@ -20,6 +20,14 @@
 #define PIN_TURBO_B  A6
 #define PIN_BUTTON_A A7
 
+#define PIN_PWM_RED   6
+#define PIN_PWM_GREEN 5
+#define PIN_PWM_BLUE  9
+
+int pwm_red = 255 - 5;
+int pwm_green = 255 - 5;
+int pwm_blue = 255 - 1;
+
 RF24 radio(7, 8);
 byte addresses[][6] = {"1Node","2Node"};
 
@@ -50,6 +58,14 @@ void setup(void)
   pinMode(PIN_BUTTON_A, INPUT_PULLUP); /* TODO: There is no pullup in MCU, we have to add it externally. */
   pinMode(PIN_BUTTON_B, INPUT_PULLUP);
 
+  pinMode(PIN_PWM_RED, OUTPUT);
+  pinMode(PIN_PWM_GREEN, OUTPUT);
+  pinMode(PIN_PWM_BLUE, OUTPUT);
+
+  analogWrite(PIN_PWM_RED, pwm_red);
+  analogWrite(PIN_PWM_GREEN, pwm_green);
+  analogWrite(PIN_PWM_BLUE, pwm_blue);
+
   randomSeed(analogRead(6)); /* TODO: Doesn't it block my ADC6 plans? I think yes. */
 
 #ifdef UART_DEBUG
@@ -73,6 +89,7 @@ void setup(void)
 uint32_t tx_data = 0;
 uint8_t command = 0;
 uint8_t laser_on = 0;
+uint8_t leds_on = 1;
 uint8_t servo_x_pos = 90;
 uint8_t servo_y_pos = 90;
 const uint8_t SERVO_X_POS_MAX = 180;
@@ -142,6 +159,17 @@ void loop(void)
 #ifdef UART_DEBUG
       Serial.println(F("Button B"));
 #endif
+      if (leds_on) {
+        leds_on = 0;
+        analogWrite(PIN_PWM_RED, 255);
+        analogWrite(PIN_PWM_GREEN, 255);
+        analogWrite(PIN_PWM_BLUE, 255);
+      } else {
+        leds_on = 1;
+        analogWrite(PIN_PWM_RED, pwm_red);
+        analogWrite(PIN_PWM_GREEN, pwm_green);
+        analogWrite(PIN_PWM_BLUE, pwm_blue);
+      }
     }
 
     command = 1 | (laser_on << 1);
