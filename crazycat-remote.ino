@@ -72,7 +72,7 @@ void setup(void)
 
 uint32_t tx_data = 0;
 uint8_t command = 0;
-uint8_t laser_on = 1;
+uint8_t laser_on = 0;
 uint8_t servo_x_pos = 90;
 uint8_t servo_y_pos = 90;
 const uint8_t SERVO_X_POS_MAX = 180;
