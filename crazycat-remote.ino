@@ -27,6 +27,15 @@
 RF24 radio(7, 8);
 byte addresses[][6] = {"1Node","2Node"};
 
+enum app_state_t {
+  ST_INIT,
+  ST_MANUAL,
+  ST_AUTO, // Also known as CRAZY
+  ST_SETUP
+};
+
+app_state_t app_state = ST_INIT;
+
 /*
  * RGB LED helper functions
  */
